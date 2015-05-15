@@ -16,7 +16,7 @@ $wgExtensionCredits['parserhook'][] = array(
 	'author' => array(
 		'Ike Hecht',
 	),
-	'version' => '0.1.0',
+	'version' => '0.1.1',
 	'url' => 'https://www.mediawiki.org/wiki/Extension:FlickrAPI',
 	'descriptionmsg' => 'flickrapi-desc',
 );

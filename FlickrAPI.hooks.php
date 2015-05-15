@@ -51,9 +51,10 @@ class FlickrAPIHooks {
 			} elseif ( empty( $options['size'] ) && array_key_exists( $currentPart, $validSizes ) ) {
 				$options['size'] = $currentPart;
 			} elseif ( empty( $options['caption'] ) ) {
-				$options['caption'] = $currentPart;
+				# Allow uppercase in caption
+				$options['caption'] = trim( htmlspecialchars( $parts->current() ) );
 			} else {
-				$options['caption'] .= '|' . $currentPart;
+				$options['caption'] .= '|' . trim( htmlspecialchars( $parts->current() ) );
 			}
 			$parts->next();
 		}
