@@ -1,8 +1,9 @@
 {
 	"@metadata": {
 		"authors": [
-			"WikiPhoenix"
+			"WikiPhoenix",
+			"Jopparn"
 		]
 	},
-	"flickrapi-desc": "Bädda in Flickr-bilder"
+	"flickrapi-desc": "Bäddar in Flickr-bilder"
 }
