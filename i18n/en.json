@@ -1,8 +1,8 @@
 {
-    "@metadata": {
+	"@metadata": {
 		"authors": [
 			"Ike Hecht"
 		]
-    },
-    "flickrapi-desc": "Embeds Flickr images"
+	},
+	"flickrapi-desc": "Embeds Flickr images"
 }
