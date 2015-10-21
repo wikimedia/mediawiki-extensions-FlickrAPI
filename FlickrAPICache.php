@@ -6,7 +6,6 @@
  * @author Ike Hecht
  */
 class FlickrAPICache {
-	const TABLE = 'FlickrAPI';
 
 	/**
 	 * Get this call from db cache
@@ -15,16 +14,12 @@ class FlickrAPICache {
 	 * @return string|boolean
 	 */
 	public static function getCache( $reqhash ) {
-		$dbr = wfGetDB( DB_SLAVE );
-		$conds = array( 'request' => $reqhash, 'CURRENT_TIMESTAMP < expiration' );
-		$result = $dbr->select( self::TABLE, 'response', $conds, __METHOD__ );
-
-		$row = $result->fetchObject();
-		if ( $row ) {
-			return ( $row->response );
-		} else {
-			return false;
-		}
+		$cache = wfGetCache( CACHE_ANYTHING );
+		$key = wfMemcKey( 'flickrapi', $reqhash );
+		$cached = $cache->get( $key );
+		wfDebugLog( "FlickrAPI", __METHOD__ . ": got " . var_export( $cached, true ) .
+			" from cache." );
+		return $cached;
 	}
 
 	/**
@@ -34,20 +29,13 @@ class FlickrAPICache {
 	 * @param string $response
 	 * @param integer $cache_expire
 	 * @return boolean
-	 * @throws MWException
 	 */
 	public static function setCache( $reqhash, $response, $cache_expire ) {
-		$dbw = wfGetDB( DB_MASTER );
-		$data = array(
-			'request' => $reqhash,
-			'response' => $response,
-			'expiration' => $dbw->encodeExpiry( wfTimestamp( TS_MW, time() + $cache_expire ) )
-		);
-		$result = $dbw->upsert( self::TABLE, $data, array( 'request' ), $data, __METHOD__ );
-		if ( !$result ) {
-			throw new MWException( 'Set Cache failed' );
-		}
-
-		return $result;
+		$cache = wfGetCache( CACHE_ANYTHING );
+		$key = wfMemcKey( 'flickrapi', $reqhash );
+		wfDebugLog( "FlickrAPI",
+			__METHOD__ . ": caching " . var_export( $response, true ) .
+			" from Flickr." );
+		return $cache->set( $key, $response, $cache_expire );
 	}
 }
