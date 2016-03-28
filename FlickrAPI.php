@@ -16,7 +16,7 @@ $wgExtensionCredits['parserhook'][] = array(
 	'author' => array(
 		'Ike Hecht',
 	),
-	'version' => '0.1.1',
+	'version' => '1.0.0',
 	'url' => 'https://www.mediawiki.org/wiki/Extension:FlickrAPI',
 	'descriptionmsg' => 'flickrapi-desc',
 );
@@ -38,13 +38,7 @@ $wgHooks['ParserFirstCallInit'][] = function ( &$parser ) {
 	return true;
 };
 
-$wgHooks['LoadExtensionSchemaUpdates'][] = function ( DatabaseUpdater $updater ) {
-	$updater->addExtensionTable( FlickrAPICache::TABLE, __DIR__ . '/FlickrAPI.sql', true );
-	return true;
-};
-
 /* Configuration */
 $wgFlickrAPIKey = '';
 $wgFlickrAPISecret = '';
-$wgFlickrAPICache = ( $wgMainCacheType === CACHE_NONE ) ? false : true;
 $wgFlickrAPIDefaults = array( 'type' => 'frameless', 'location' => 'right', 'size' => '-' );

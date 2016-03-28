@@ -118,7 +118,6 @@ class FlickrAPIHooks {
 	 *
 	 * @global string $wgFlickrAPIKey
 	 * @global string $wgFlickrAPISecret
-	 * @global boolean $wgFlickrAPICache
 	 * @global boolean $wgUseFileCache
 	 * @global string $wgFileCacheDirectory
 	 * @param string $optionsString
@@ -127,8 +126,7 @@ class FlickrAPIHooks {
 	 * @throws MWException
 	 */
 	private static function getOutput( $optionsString, Parser $parser ) {
-		global $wgFlickrAPIKey, $wgFlickrAPISecret,
-		$wgFlickrAPICache, $wgUseFileCache, $wgFileCacheDirectory;
+		global $wgFlickrAPIKey, $wgFlickrAPISecret, $wgUseFileCache, $wgFileCacheDirectory;
 
 		wfProfileIn( __METHOD__ );
 
@@ -147,14 +145,13 @@ class FlickrAPIHooks {
 		}
 
 		$phpFlickr = new phpFlickr( $wgFlickrAPIKey, $wgFlickrAPISecret );
-		// Decide which cache to use, if any.
-		if ( $wgFlickrAPICache ) {
-			if ( $wgUseFileCache ) {
-				$phpFlickr->enableCache( 'fs', $wgFileCacheDirectory );
-			} else {
-				$phpFlickr->enableCache( 'custom',
-					array( 'FlickrAPICache::getCache', 'FlickrAPICache::setCache' ) );
-			}
+
+		// Decide which cache to use
+		if ( $wgUseFileCache ) {
+			$phpFlickr->enableCache( 'fs', $wgFileCacheDirectory );
+		} else {
+			$phpFlickr->enableCache( 'custom',
+				array( 'FlickrAPICache::getCache', 'FlickrAPICache::setCache' ) );
 		}
 
 		$info = $phpFlickr->photos_getInfo( $options['id'] );
