@@ -1,8 +1,9 @@
 {
 	"@metadata": {
 		"authors": [
-			"Esketti"
+			"Esketti",
+			"QZanden"
 		]
 	},
-	"flickrapi-desc": "Sluit Flickr-afbeeldingen"
+	"flickrapi-desc": "Voegt Flickr-afbeeldingen in"
 }
