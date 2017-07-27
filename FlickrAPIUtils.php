@@ -13,7 +13,7 @@ class FlickrAPIUtils {
 	 * Given parameters derived from [[Image:Foo|options...]], generate the
 	 * HTML that that syntax inserts in the page.
 	 *
-	 * @param Parser $parser
+	 * @param Parser $parser The parser.
 	 * @param string $url URL of the image being displayed
 	 * @param array $frameParams Associative array of parameters external to the media handler.
 	 *     Boolean parameters are indicated by presence or absence, the value is arbitrary and
@@ -39,12 +39,11 @@ class FlickrAPIUtils {
 	 *       to transform(). Typical keys are "width" and "page".
 	 * @param string|bool $time Timestamp of the file, set as false for current
 	 * @param string $query Query params for desc url
-	 * @param int|null $widthOption Used by the parser to remember the user preference thumbnailsize
 	 * @since 1.20
 	 * @return string HTML for an image, with links, wrappers, etc.
 	 */
-	public static function makeImageLink( Parser $parser, $url, $frameParams = array(),
-		$handlerParams = array(), $time = false, $query = "" ) {
+	public static function makeImageLink( Parser $parser, $url, $frameParams = [],
+		$handlerParams = [], $time = false, $query = "" ) {
 		// Shortcuts
 		$fp = & $frameParams;
 		$hp = & $handlerParams;
@@ -72,23 +71,25 @@ class FlickrAPIUtils {
 		}
 
 		if ( isset( $fp['thumbnail'] ) || isset( $fp['manualthumb'] ) || isset( $fp['framed'] ) ) {
-			# Create a thumbnail. Alignment depends on the writing direction of
-			# the page content language (right-aligned for LTR languages,
-			# left-aligned for RTL languages)
-			#
-			# If a thumbnail width has not been provided, it is set
-			# to the default user option as specified in Language*.php
+			/*
+			 * Create a thumbnail. Alignment depends on the writing direction of
+			 * the page content language (right-aligned for LTR languages,
+			 * left-aligned for RTL languages).
+			 *
+			 * If a thumbnail width has not been provided, it is set
+			 * to the default user option as specified in Language*.php
+			 */
 			if ( $fp['align'] == '' ) {
 				$fp['align'] = $parser->getTargetLanguage()->alignEnd();
 			}
 			return $prefix . self::makeThumbLink2( $url, $fp, $hp, $time, $query ) . $postfix;
 		}
 
-		$params = array(
+		$params = [
 			'alt' => $fp['alt'],
 			'title' => $fp['title'],
 			'valign' => isset( $fp['valign'] ) ? $fp['valign'] : false,
-			'img-class' => $fp['class'] );
+			'img-class' => $fp['class'] ];
 		if ( isset( $fp['border'] ) ) {
 			$params['img-class'] .= ( $params['img-class'] !== '' ? ' ' : '' ) . 'thumbborder';
 		}
@@ -105,14 +106,14 @@ class FlickrAPIUtils {
 	/**
 	 * Scaled down & modified version of Linker::makeThumbLink2. Not all options are implemented yet.
 	 *
-	 * @param string $url
-	 * @param array $frameParams
-	 * @param array $handlerParams
-	 * @param bool $time
-	 * @param string $query
+	 * @param string $url Image URL.
+	 * @param array $frameParams The frame parameters: align, alt, title, caption.
+	 * @param array $handlerParams The handler parameters: width, custom-url-link.
+	 * @param bool $time Not used.
+	 * @param string $query An optional query string to add to description page links.
 	 * @return string
 	 */
-	public static function makeThumbLink2( $url, $frameParams = array(), $handlerParams = array(),
+	public static function makeThumbLink2( $url, $frameParams = [], $handlerParams = [],
 		$time = false, $query = ""
 	) {
 		# Shortcuts
@@ -142,23 +143,24 @@ class FlickrAPIUtils {
 		$s = "<div class=\"thumb t{$fp['align']}\">"
 			. "<div class=\"thumbinner\" style=\"width:{$outerWidth}px;\">";
 
-		$params = array(
+		$params = [
 			'alt' => $fp['alt'],
 			'title' => $fp['title'],
 			'img-class' => ( isset( $fp['class'] ) && $fp['class'] !== '' ? $fp['class'] . ' ' : '' )
 			. 'thumbimage'
-		);
+		];
 		$imageLinkparams = self::getImageLinkMTOParams( $fp, $query ) + $params;
 		$s .= self::thumbToHtml( $imageLinkparams, $url );
 
 		if ( isset( $fp['framed'] ) ) {
 			$zoomIcon = "";
 		} else {
-			$zoomIcon = Html::rawElement( 'div', array( 'class' => 'magnify' ),
+			$zoomIcon = Html::rawElement( 'div', [ 'class' => 'magnify' ],
 					Html::rawElement( 'a',
-						array(
+						[
 						'href' => $hp['custom-url-link'],
-						'title' => wfMessage( 'thumbnail-more' )->text() ), "" ) );
+						'title' => wfMessage( 'thumbnail-more' )->text()
+						], "" ) );
 		}
 		$s .= '  <div class="thumbcaption">' . $zoomIcon . $fp['caption'] . "</div></div></div>";
 		return str_replace( "\n", ' ', $s );
@@ -175,7 +177,7 @@ class FlickrAPIUtils {
 	 * @return array
 	 */
 	private static function getImageLinkMTOParams( $frameParams, $query = '', $parser = null ) {
-		$mtoParams = array();
+		$mtoParams = [];
 		if ( isset( $frameParams['link-url'] ) && $frameParams['link-url'] !== '' ) {
 			$mtoParams['custom-url-link'] = $frameParams['link-url'];
 			if ( isset( $frameParams['link-target'] ) ) {
@@ -228,16 +230,16 @@ class FlickrAPIUtils {
 	 *
 	 * For images, desc-link and file-link are implemented as a click-through. For
 	 * sounds and videos, they may be displayed in other ways.
-	 * @param string $url
+	 * @param string $url The image URL.
 	 * @return string
 	 */
-	public static function thumbToHtml( $options = array(), $url ) {
+	public static function thumbToHtml( $options = [], $url ) {
 		$alt = empty( $options['alt'] ) ? '' : $options['alt'];
 
 		$query = empty( $options['desc-query'] ) ? '' : $options['desc-query'];
 
 		if ( !empty( $options['custom-url-link'] ) ) {
-			$linkAttribs = array( 'href' => $options['custom-url-link'] );
+			$linkAttribs = [ 'href' => $options['custom-url-link'] ];
 			if ( !empty( $options['title'] ) ) {
 				$linkAttribs['title'] = $options['title'];
 			}
@@ -259,10 +261,10 @@ class FlickrAPIUtils {
 			$linkAttribs = false;
 		}
 
-		$attribs = array(
+		$attribs = [
 			'alt' => $alt,
 			'src' => $url,
-		);
+		];
 
 		if ( !empty( $options['valign'] ) ) {
 			$attribs['style'] = "vertical-align: {$options['valign']}";

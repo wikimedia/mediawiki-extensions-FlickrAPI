@@ -10,8 +10,8 @@ class FlickrAPICache {
 	/**
 	 * Get this call from db cache
 	 *
-	 * @param string $reqhash
-	 * @return string|boolean
+	 * @param string $reqhash The cache key.
+	 * @return string|bool
 	 */
 	public static function getCache( $reqhash ) {
 		$cache = wfGetCache( CACHE_ANYTHING );
@@ -23,12 +23,12 @@ class FlickrAPICache {
 	}
 
 	/**
-	 * Store this call in cache
+	 * Store this call in cache.
 	 *
-	 * @param string $reqhash
-	 * @param string $response
-	 * @param integer $cache_expire
-	 * @return boolean
+	 * @param string $reqhash The cache key.
+	 * @param string $response The response to cache.
+	 * @param integer $cache_expire Either an interval in seconds or a unix timestamp for expiry.
+	 * @return bool
 	 */
 	public static function setCache( $reqhash, $response, $cache_expire ) {
 		$cache = wfGetCache( CACHE_ANYTHING );

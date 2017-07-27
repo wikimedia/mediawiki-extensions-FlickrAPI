@@ -9,11 +9,22 @@
 class FlickrAPIHooks {
 
 	/**
+	 * Hooked to ParserFirstCallInit.
+	 * @link https://www.mediawiki.org/wiki/Manual:Hooks/ParserFirstCallInit
+	 * @param Parser &$parser The parser.
+	 * @return bool
+	 */
+	public static function onParserFirstCallInit( Parser &$parser ) {
+		$parser->setHook( 'flickr', self::class.'::flickrAPITag' );
+		return true;
+	}
+
+	/**
 	 * Get output for the <flickr> tag
 	 *
-	 * @param string $optionsString
-	 * @param array $args
-	 * @param Parser $parser
+	 * @param string $optionsString Tag content.
+	 * @param array $args Tag attributes.
+	 * @param Parser $parser The parser.
 	 * @return string
 	 */
 	public static function flickrAPITag( $optionsString, array $args, Parser $parser ) {
@@ -34,12 +45,12 @@ class FlickrAPIHooks {
 	private static function extractOptions( $optionsString ) {
 		$parts = StringUtils::explode( '|', $optionsString );
 
-		$options = array( 'id' => $parts->current() );
+		$options = [ 'id' => $parts->current() ];
 		$parts->next();
 
 		$validSizes = self::getValidSizes();
-		$validTypes = array( 'thumb', 'frame', 'frameless' );
-		$validAligns = array( 'right', 'left', 'center', 'none' );
+		$validTypes = [ 'thumb', 'frame', 'frameless' ];
+		$validAligns = [ 'right', 'left', 'center', 'none' ];
 		# Okay now deal with parameters
 		/** @todo Copied from Flickr extension. Refactor. */
 		while ( $parts->valid() ) {
@@ -69,13 +80,13 @@ class FlickrAPIHooks {
 	 * @return array
 	 */
 	private static function getValidSizes() {
-		return array(
+		return [
 			's' => 'Square',
 			't' => 'Thumbnail',
 			'm' => 'Small',
 			'-' => 'Medium',
 			'b' => 'Large',
-		);
+		];
 	}
 
 	/**
@@ -109,7 +120,7 @@ class FlickrAPIHooks {
 	 * @return string HTML
 	 */
 	private static function handleError( MWException $e ) {
-		return Html::element( 'strong', array( 'class' => array( 'error', 'flickrapi-error' ) ),
+		return Html::element( 'strong', [ 'class' => [ 'error', 'flickrapi-error' ] ],
 				$e->getMessage() );
 	}
 
@@ -151,7 +162,7 @@ class FlickrAPIHooks {
 			$phpFlickr->enableCache( 'fs', $wgFileCacheDirectory );
 		} else {
 			$phpFlickr->enableCache( 'custom',
-				array( 'FlickrAPICache::getCache', 'FlickrAPICache::setCache' ) );
+				[ 'FlickrAPICache::getCache', 'FlickrAPICache::setCache' ] );
 		}
 
 		$info = $phpFlickr->photos_getInfo( $options['id'] );
@@ -164,13 +175,13 @@ class FlickrAPIHooks {
 
 		$linkUrl = $info['photo']['urls']['url']['0']['_content'];
 
-		$frameParams = array(
+		$frameParams = [
 			'align' => $options['location'],
 			'alt' => $options['caption'],
 			'caption' => $options['caption'],
 			'title' => $options['caption'],
 			'link-url' => $linkUrl
-		);
+		];
 
 		if ( $options['type'] == 'thumb' ) {
 			$frameParams['thumbnail'] = true;
@@ -179,7 +190,7 @@ class FlickrAPIHooks {
 		}
 
 		$validSizes = self::getValidSizes();
-		$handlerParams = array();
+		$handlerParams = [];
 		foreach ( $flickrSizes as $flickrSize ) {
 			if ( $flickrSize['label'] === $validSizes[$options['size']] ) {
 				$handlerParams['width'] = $flickrSize['width'];
@@ -196,6 +207,6 @@ class FlickrAPIHooks {
 		$imageLink = FlickrAPIUtils::makeImageLink( $parser, $url, $frameParams, $handlerParams );
 
 		wfProfileOut( __METHOD__ );
-		return Html::rawElement( 'div', array( 'class' => 'flickrapi' ), $imageLink );
+		return Html::rawElement( 'div', [ 'class' => 'flickrapi' ], $imageLink );
 	}
 }
