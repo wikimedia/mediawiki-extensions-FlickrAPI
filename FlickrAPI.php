@@ -29,6 +29,7 @@ $wgAutoloadClasses['FlickrAPIUtils'] = __DIR__ . '/FlickrAPIUtils.php';
 $wgAutoloadClasses['FlickrAPICache'] = __DIR__ . '/FlickrAPICache.php';
 /** @todo Spit out better error message if phpflickr module doesn't exist */
 $wgAutoloadClasses['phpFlickr'] = __DIR__ . '/modules/phpflickr/phpFlickr.php';
+$wgAutoloadClasses['phpFlickr_pager'] = __DIR__ . '/modules/phpflickr/phpFlickr.php';
 
 $wgMessagesDirs['FlickrAPI'] = __DIR__ . '/i18n';
 
