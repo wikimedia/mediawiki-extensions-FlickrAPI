@@ -27,7 +27,7 @@ class FlickrAPICache {
 	 *
 	 * @param string $reqhash The cache key.
 	 * @param string $response The response to cache.
-	 * @param integer $cache_expire Either an interval in seconds or a unix timestamp for expiry.
+	 * @param int $cache_expire Either an interval in seconds or a unix timestamp for expiry.
 	 * @return bool
 	 */
 	public static function setCache( $reqhash, $response, $cache_expire ) {
