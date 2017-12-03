@@ -1,6 +1,7 @@
 {
 	"name": "FlickrAPI",
-	"version": "2.0.0",
+	"version": "2.0.1",
+	"license-name": "GPL-2.0+",
 	"author": [
 		"Ike Hecht",
 		"Sam Wilson"
