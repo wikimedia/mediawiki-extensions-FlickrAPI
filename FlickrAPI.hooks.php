@@ -139,8 +139,6 @@ class FlickrAPIHooks {
 	private static function getOutput( $optionsString, Parser $parser ) {
 		global $wgFlickrAPIKey, $wgFlickrAPISecret, $wgUseFileCache, $wgFileCacheDirectory;
 
-		wfProfileIn( __METHOD__ );
-
 		$options = self::extractOptions( $optionsString );
 
 		/** @todo i18n these errors? */
@@ -206,7 +204,6 @@ class FlickrAPIHooks {
 
 		$imageLink = FlickrAPIUtils::makeImageLink( $parser, $url, $frameParams, $handlerParams );
 
-		wfProfileOut( __METHOD__ );
 		return Html::rawElement( 'div', [ 'class' => 'flickrapi' ], $imageLink );
 	}
 }
