@@ -1,8 +1,9 @@
 {
 	"@metadata": {
 		"authors": [
-			"Revi"
+			"Revi",
+			"Garam"
 		]
 	},
-	"flickrapi-desc": "플리커 이미지 삽입"
+	"flickrapi-desc": "플리커 영상 삽입"
 }
