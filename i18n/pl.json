@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Railfail536"
+			"Railfail536",
+			"Rail"
 		]
 	},
 	"flickrapi-desc": "Umożliwia osadzanie obrazów z serwisu Flickr"
