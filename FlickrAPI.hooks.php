@@ -93,7 +93,7 @@ class FlickrAPIHooks {
 	 * Apply defaults for any parameter that has not been set within the <flickr> tag
 	 *
 	 * @global array $wgFlickrAPIDefaults
-	 * @param array $options
+	 * @param array &$options
 	 * @param array $info
 	 */
 	private static function applyDefaults( array &$options, array $info ) {
