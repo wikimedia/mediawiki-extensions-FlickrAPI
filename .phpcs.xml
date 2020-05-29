@@ -3,6 +3,7 @@
 	<rule ref="./vendor/mediawiki/mediawiki-codesniffer/MediaWiki">
 		<exclude name="MediaWiki.Commenting.FunctionAnnotations.UnrecognizedAnnotation" />
 		<exclude name="MediaWiki.Files.ClassMatchesFilename.NotMatch" />
+		<exclude name="PEAR.Functions.ValidDefaultValue.NotAtEnd" />
 	</rule>
 	<file>.</file>
 </ruleset>
