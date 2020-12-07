@@ -14,8 +14,8 @@ class FlickrAPICache {
 	 * @return string|bool
 	 */
 	public static function getCache( $reqhash ) {
-		$cache = wfGetCache( CACHE_ANYTHING );
-		$key = wfMemcKey( 'flickrapi', $reqhash );
+		$cache = ObjectCache::getInstance( CACHE_ANYTHING );
+		$key = $cache->makeKey( 'flickrapi', $reqhash );
 		$cached = $cache->get( $key );
 		wfDebugLog( "FlickrAPI", __METHOD__ . ": got " . var_export( $cached, true ) .
 			" from cache." );
@@ -31,8 +31,8 @@ class FlickrAPICache {
 	 * @return bool
 	 */
 	public static function setCache( $reqhash, $response, $cache_expire ) {
-		$cache = wfGetCache( CACHE_ANYTHING );
-		$key = wfMemcKey( 'flickrapi', $reqhash );
+		$cache = ObjectCache::getInstance( CACHE_ANYTHING );
+		$key = $cache->makeKey( 'flickrapi', $reqhash );
 		wfDebugLog( "FlickrAPI",
 			__METHOD__ . ": caching " . var_export( $response, true ) .
 			" from Flickr." );
