@@ -64,7 +64,7 @@ class FlickrAPIUtils {
 
 		$prefix = $postfix = '';
 
-		if ( 'center' == $fp['align'] ) {
+		if ( $fp['align'] == 'center' ) {
 			$prefix = '<div class="center">';
 			$postfix = '</div>';
 			$fp['align'] = 'none';
