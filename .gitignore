@@ -1,5 +1,7 @@
 node_modules/
 vendor/
+composer.lock
+.eslintcache
 
 # Editors
 *.kate-swp
@@ -14,10 +16,11 @@ vendor/
 cscope.files
 cscope.out
 *.orig
+
 ## NetBeans
 nbproject*
 project.index
+
 ## Sublime
 sublime-*
 sftp-config.json
-composer.lock
