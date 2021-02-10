@@ -207,6 +207,7 @@ class FlickrAPIUtils {
 	 * Return HTML <img ... /> tag for the thumbnail, will include
 	 * width and height attributes and a blank alt text (as required).
 	 *
+	 * @param string $url The image URL.
 	 * @param array $options Associative array of options. Boolean options
 	 *     should be indicated with a value of true for true, and false or
 	 *     absent for false.
@@ -230,10 +231,10 @@ class FlickrAPIUtils {
 	 *
 	 * For images, desc-link and file-link are implemented as a click-through. For
 	 * sounds and videos, they may be displayed in other ways.
-	 * @param string $url The image URL.
+	 *
 	 * @return string
 	 */
-	public static function thumbToHtml( $options = [], $url ) {
+	public static function thumbToHtml( $url, $options = [] ) {
 		$alt = empty( $options['alt'] ) ? '' : $options['alt'];
 
 		$query = empty( $options['desc-query'] ) ? '' : $options['desc-query'];

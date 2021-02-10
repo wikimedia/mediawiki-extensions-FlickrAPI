@@ -15,9 +15,9 @@
 		]
 	},
 	"AutoloadClasses": {
-		"FlickrAPIHooks": "FlickrAPI.hooks.php",
-		"FlickrAPIUtils": "FlickrAPIUtils.php",
-		"FlickrAPICache": "FlickrAPICache.php"
+		"FlickrAPIHooks": "includes/FlickrAPIHooks.php",
+		"FlickrAPIUtils": "includes/FlickrAPIUtils.php",
+		"FlickrAPICache": "includes/FlickrAPICache.php"
 	},
 	"Hooks": {
 		"ParserFirstCallInit": "FlickrAPIHooks::onParserFirstCallInit"
