@@ -14,7 +14,7 @@ class FlickrAPIUtils {
 	 * HTML that that syntax inserts in the page.
 	 *
 	 * @param Parser $parser The parser.
-	 * @param string $url URL of the image being displayed
+	 * @param array $url URL of the image being displayed
 	 * @param array $frameParams Associative array of parameters external to the media handler.
 	 *     Boolean parameters are indicated by presence or absence, the value is arbitrary and
 	 *     will often be false.
@@ -106,7 +106,7 @@ class FlickrAPIUtils {
 	/**
 	 * Scaled down & modified version of Linker::makeThumbLink2. Not all options are implemented yet.
 	 *
-	 * @param string $url Image URL.
+	 * @param array $url Image URL.
 	 * @param array $frameParams The frame parameters: align, alt, title, caption.
 	 * @param array $handlerParams The handler parameters: width, custom-url-link.
 	 * @param bool $time Not used.
@@ -195,6 +195,7 @@ class FlickrAPIUtils {
 				}
 			}
 		} elseif ( isset( $frameParams['link-title'] ) && $frameParams['link-title'] !== '' ) {
+			// @phan-suppress-next-line PhanUndeclaredStaticMethod Call to non-available method
 			$mtoParams['custom-title-link'] = self::normaliseSpecialPage( $frameParams['link-title'] );
 		} elseif ( !empty( $frameParams['no-link'] ) ) {
 			// No link
@@ -211,7 +212,7 @@ class FlickrAPIUtils {
 	 * Return HTML <img ... /> tag for the thumbnail, will include
 	 * width and height attributes and a blank alt text (as required).
 	 *
-	 * @param string $url The image URL.
+	 * @param array $url The image URL.
 	 * @param array $options Associative array of options. Boolean options
 	 *     should be indicated with a value of true for true, and false or
 	 *     absent for false.
@@ -286,6 +287,7 @@ class FlickrAPIUtils {
 
 		// Copied from linkWrap function
 		$contents = Xml::element( 'img', $attribs );
+		// @phan-suppress-next-line PhanPossiblyUndeclaredVariable
 		if ( $linkAttribs ) {
 			return Xml::tags( 'a', $linkAttribs, $contents );
 		} else {

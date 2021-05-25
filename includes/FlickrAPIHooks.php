@@ -12,7 +12,6 @@ class FlickrAPIHooks {
 	 * Hooked to ParserFirstCallInit.
 	 * @see https://www.mediawiki.org/wiki/Manual:Hooks/ParserFirstCallInit
 	 * @param Parser &$parser The parser.
-	 * @return bool
 	 */
 	public static function onParserFirstCallInit( Parser &$parser ) {
 		$parser->setHook( 'flickr', self::class . '::flickrAPITag' );
