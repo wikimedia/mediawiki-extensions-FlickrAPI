@@ -88,7 +88,7 @@ class FlickrAPIUtils {
 		$params = [
 			'alt' => $fp['alt'],
 			'title' => $fp['title'],
-			'valign' => isset( $fp['valign'] ) ? $fp['valign'] : false,
+			'valign' => $fp['valign'] ?? false,
 			'img-class' => $fp['class'] ];
 		if ( isset( $fp['border'] ) ) {
 			$params['img-class'] .= ( $params['img-class'] !== '' ? ' ' : '' ) . 'thumbborder';
@@ -113,8 +113,12 @@ class FlickrAPIUtils {
 	 * @param string $query An optional query string to add to description page links.
 	 * @return string
 	 */
-	public static function makeThumbLink2( $url, $frameParams = [], $handlerParams = [],
-		$time = false, $query = ""
+	public static function makeThumbLink2(
+		$url,
+		$frameParams = [],
+		$handlerParams = [],
+		$time = false,
+		$query = ""
 	) {
 		# Shortcuts
 		$fp = & $frameParams;
