@@ -98,7 +98,7 @@ class FlickrAPIUtils {
 		$s = self::thumbToHtml( $imageLinkparams, $url );
 
 		if ( $fp['align'] != '' ) {
-			$s = "<div class=\"float{$fp['align']}\">{$s}</div>";
+			$s = '<div class="float' . htmlspecialchars( $fp['align'] ) . '">' . $s . '</div>';
 		}
 		return str_replace( "\n", ' ', $prefix . $s . $postfix );
 	}
@@ -142,10 +142,10 @@ class FlickrAPIUtils {
 			$hp['width'] = isset( $fp['upright'] ) ? 130 : 180;
 		}
 
-		$outerWidth = $hp['width'] + 2;
+		$outerWidth = (int)$hp['width'] + 2;
 
-		$s = "<div class=\"thumb t{$fp['align']}\">"
-			. "<div class=\"thumbinner\" style=\"width:{$outerWidth}px;\">";
+		$s = '<div class="thumb t' . htmlspecialchars( $fp['align'] ) . '">'
+			. '<div class="thumbinner" style="width:' . $outerWidth . 'px;">';
 
 		$params = [
 			'alt' => $fp['alt'],
@@ -166,7 +166,7 @@ class FlickrAPIUtils {
 						'title' => wfMessage( 'thumbnail-more' )->text()
 						], "" ) );
 		}
-		$s .= '  <div class="thumbcaption">' . $zoomIcon . $fp['caption'] . "</div></div></div>";
+		$s .= '  <div class="thumbcaption">' . $zoomIcon . htmlspecialchars( $fp['caption'] ) . "</div></div></div>";
 		return str_replace( "\n", ' ', $s );
 	}
 

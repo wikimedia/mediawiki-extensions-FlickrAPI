@@ -200,6 +200,7 @@ class FlickrAPIHooks {
 
 		$handlerParams['custom-url-link'] = $linkUrl;
 
+		// @phan-suppress-next-line SecurityCheck-DoubleEscaped mixed taint on array $frameParams
 		$imageLink = FlickrAPIUtils::makeImageLink( $parser, $url, $frameParams, $handlerParams );
 
 		return Html::rawElement( 'div', [ 'class' => 'flickrapi' ], $imageLink );
