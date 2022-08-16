@@ -1,8 +1,9 @@
 {
 	"@metadata": {
 		"authors": [
-			"YaronSh"
+			"YaronSh",
+			"Amire80"
 		]
 	},
-	"flickrapi-desc": "הטמעת תמונות מ־Flickr"
+	"flickrapi-desc": "הטבעת תמונות מ־Flickr"
 }
