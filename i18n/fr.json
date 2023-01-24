@@ -1,8 +1,9 @@
 {
 	"@metadata": {
 		"authors": [
-			"Gomoko"
+			"Gomoko",
+			"Verdy p"
 		]
 	},
-	"flickrapi-desc": "Incorpore les images de Flickr"
+	"flickrapi-desc": "Incorpore des images de Flickr"
 }
