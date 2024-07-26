@@ -19,11 +19,18 @@
 	},
 	"AutoloadClasses": {
 		"FlickrAPIHooks": "includes/FlickrAPIHooks.php",
-		"FlickrAPIUtils": "includes/FlickrAPIUtils.php",
-		"FlickrAPICache": "includes/FlickrAPICache.php"
+		"FlickrAPIUtils": "includes/FlickrAPIUtils.php"
 	},
 	"Hooks": {
-		"ParserFirstCallInit": "FlickrAPIHooks::onParserFirstCallInit"
+		"ParserFirstCallInit": "FlickrAPIHooks"
+	},
+	"HookHandlers": {
+		"FlickrAPIHooks": {
+			"class": "FlickrAPIHooks",
+			"services": [
+				"ObjectCacheFactory"
+			]
+		}
 	},
 	"config": {
 		"FlickrAPIKey": "",

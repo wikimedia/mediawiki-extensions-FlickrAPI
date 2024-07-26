@@ -1,6 +1,7 @@
 {
 	"require": {
-		"dan-coulter/phpflickr": "dev-master"
+		"samwilson/phpflickr": "^5.0",
+		"addshore/psr-6-mediawiki-bagostuff-adapter": "^0.1.0"
 	},
 	"require-dev": {
 		"mediawiki/mediawiki-codesniffer": "43.0.0",
