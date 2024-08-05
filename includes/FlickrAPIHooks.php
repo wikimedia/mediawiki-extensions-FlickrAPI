@@ -14,8 +14,8 @@ class FlickrAPIHooks implements ParserFirstCallInitHook {
 
 	private BagOStuff $cache;
 
-	public function __construct( ObjectCacheFactory $cacheFactory ) {
-		$this->cache = $cacheFactory->getInstance( CACHE_ANYTHING );
+	public function __construct( BagOStuff $cache ) {
+		$this->cache = $cache;
 	}
 
 	/**

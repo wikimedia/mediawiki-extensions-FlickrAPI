@@ -28,7 +28,7 @@
 		"FlickrAPIHooks": {
 			"class": "FlickrAPIHooks",
 			"services": [
-				"ObjectCacheFactory"
+				"LocalServerObjectCache"
 			]
 		}
 	},
