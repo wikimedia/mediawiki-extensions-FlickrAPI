@@ -1,20 +1,30 @@
 <?php
 
+use Addshore\Psr\Cache\MWBagOStuffAdapter\BagOStuffPsrCache;
+use MediaWiki\Hook\ParserFirstCallInitHook;
+use Samwilson\PhpFlickr\PhpFlickr;
+
 /**
  * Hooks for FlickrAPI extension
  *
  * @file
  * @ingroup Extensions
  */
-class FlickrAPIHooks {
+class FlickrAPIHooks implements ParserFirstCallInitHook {
+
+	private BagOStuff $cache;
+
+	public function __construct( BagOStuff $cache ) {
+		$this->cache = $cache;
+	}
 
 	/**
 	 * Hooked to ParserFirstCallInit.
 	 * @see https://www.mediawiki.org/wiki/Manual:Hooks/ParserFirstCallInit
-	 * @param Parser &$parser The parser.
+	 * @inheritDoc
 	 */
-	public static function onParserFirstCallInit( Parser &$parser ) {
-		$parser->setHook( 'flickr', self::class . '::flickrAPITag' );
+	public function onParserFirstCallInit( $parser ) {
+		$parser->setHook( 'flickr', [ $this, 'flickrAPITag' ] );
 	}
 
 	/**
@@ -25,11 +35,11 @@ class FlickrAPIHooks {
 	 * @param Parser $parser The parser.
 	 * @return string
 	 */
-	public static function flickrAPITag( $optionsString, array $args, Parser $parser ) {
+	public function flickrAPITag( $optionsString, array $args, Parser $parser ) {
 		try {
-			$output = self::getOutput( $optionsString, $parser );
+			$output = $this->getOutput( $optionsString, $parser );
 		} catch ( MWException $e ) {
-			return self::handleError( $e );
+			return $this->handleError( $e );
 		}
 		return $output;
 	}
@@ -40,13 +50,13 @@ class FlickrAPIHooks {
 	 * @param string $optionsString
 	 * @return array
 	 */
-	private static function extractOptions( $optionsString ) {
+	private function extractOptions( $optionsString ) {
 		$parts = StringUtils::explode( '|', $optionsString );
 
 		$options = [ 'id' => $parts->current() ];
 		$parts->next();
 
-		$validSizes = self::getValidSizes();
+		$validSizes = $this->getValidSizes();
 		$validTypes = [ 'thumb', 'frame', 'frameless' ];
 		$validAligns = [ 'right', 'left', 'center', 'none' ];
 		# Okay now deal with parameters
@@ -77,7 +87,7 @@ class FlickrAPIHooks {
 	 *
 	 * @return array
 	 */
-	private static function getValidSizes() {
+	private function getValidSizes() {
 		return [
 			's' => 'Square',
 			't' => 'Thumbnail',
@@ -94,7 +104,7 @@ class FlickrAPIHooks {
 	 * @param array &$options
 	 * @param array $info
 	 */
-	private static function applyDefaults( array &$options, array $info ) {
+	private function applyDefaults( array &$options, array $info ) {
 		global $wgFlickrAPIDefaults;
 
 		if ( empty( $options['type'] ) ) {
@@ -107,7 +117,7 @@ class FlickrAPIHooks {
 			$options['size'] = $wgFlickrAPIDefaults['size'];
 		}
 		if ( empty( $options['caption'] ) ) {
-			$options['caption'] = $info['photo']['title']['_content'];
+			$options['caption'] = $info['title'];
 		}
 	}
 
@@ -117,7 +127,7 @@ class FlickrAPIHooks {
 	 * @param MWException $e
 	 * @return string HTML
 	 */
-	private static function handleError( MWException $e ) {
+	private function handleError( MWException $e ) {
 		return Html::element( 'strong', [ 'class' => [ 'error', 'flickrapi-error' ] ],
 				$e->getMessage() );
 	}
@@ -133,11 +143,12 @@ class FlickrAPIHooks {
 	 * @param Parser $parser
 	 * @return string HTML
 	 * @throws MWException
+	 * @suppress PhanTypePossiblyInvalidDimOffset Phan doesn't understand $options
 	 */
-	private static function getOutput( $optionsString, Parser $parser ) {
-		global $wgFlickrAPIKey, $wgFlickrAPISecret, $wgUseFileCache, $wgFileCacheDirectory;
+	private function getOutput( $optionsString, Parser $parser ) {
+		global $wgFlickrAPIKey, $wgFlickrAPISecret;
 
-		$options = self::extractOptions( $optionsString );
+		$options = $this->extractOptions( $optionsString );
 
 		/** @todo i18n these errors? */
 		if ( $wgFlickrAPIKey == '' ) {
@@ -151,25 +162,18 @@ class FlickrAPIHooks {
 			throw new MWException( 'Flickr Error ( Not a valid ID ): PhotoID not numeric' );
 		}
 
-		$phpFlickr = new phpFlickr( $wgFlickrAPIKey, $wgFlickrAPISecret );
+		$phpFlickr = new PhpFlickr( $wgFlickrAPIKey, $wgFlickrAPISecret );
+		$phpFlickr->setCache( new BagOStuffPsrCache( $this->cache ) );
 
-		// Decide which cache to use
-		if ( $wgUseFileCache ) {
-			$phpFlickr->enableCache( 'fs', $wgFileCacheDirectory );
-		} else {
-			$phpFlickr->enableCache( 'custom',
-				[ 'FlickrAPICache::getCache', 'FlickrAPICache::setCache' ] );
-		}
-
-		$info = $phpFlickr->photos_getInfo( $options['id'] );
-		$flickrSizes = $phpFlickr->photos_getSizes( $options['id'] );
+		$info = $phpFlickr->photos()->getInfo( $options['id'] );
+		$flickrSizes = $phpFlickr->photos()->getSizes( $options['id'] );
 		if ( !$info || !$flickrSizes ) {
 			throw new MWException( 'Flickr Error ( Photo not found ): PhotoID ' . $options['id'] );
 		}
 
-		self::applyDefaults( $options, $info );
+		$this->applyDefaults( $options, $info );
 
-		$linkUrl = $info['photo']['urls']['url']['0']['_content'];
+		$linkUrl = $info['urls']['url']['0']['_content'];
 
 		$frameParams = [
 			'align' => $options['location'],
@@ -185,9 +189,9 @@ class FlickrAPIHooks {
 			$frameParams['framed'] = true;
 		}
 
-		$validSizes = self::getValidSizes();
+		$validSizes = $this->getValidSizes();
 		$handlerParams = [];
-		foreach ( $flickrSizes as $flickrSize ) {
+		foreach ( $flickrSizes['size'] as $flickrSize ) {
 			if ( $flickrSize['label'] === $validSizes[$options['size']] ) {
 				$handlerParams['width'] = $flickrSize['width'];
 				$url = $flickrSize['source'];
@@ -200,7 +204,6 @@ class FlickrAPIHooks {
 
 		$handlerParams['custom-url-link'] = $linkUrl;
 
-		// @phan-suppress-next-line SecurityCheck-DoubleEscaped mixed taint on array $frameParams
 		$imageLink = FlickrAPIUtils::makeImageLink( $parser, $url, $frameParams, $handlerParams );
 
 		return Html::rawElement( 'div', [ 'class' => 'flickrapi' ], $imageLink );

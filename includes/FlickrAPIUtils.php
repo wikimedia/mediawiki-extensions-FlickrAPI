@@ -95,7 +95,7 @@ class FlickrAPIUtils {
 		}
 		$imageLinkparams = self::getImageLinkMTOParams( $fp, $query, $parser ) + $params;
 
-		$s = self::thumbToHtml( $imageLinkparams, $url );
+		$s = self::thumbToHtml( $url, $imageLinkparams );
 
 		if ( $fp['align'] != '' ) {
 			$s = '<div class="float' . htmlspecialchars( $fp['align'] ) . '">' . $s . '</div>';
@@ -154,7 +154,7 @@ class FlickrAPIUtils {
 			. 'thumbimage'
 		];
 		$imageLinkparams = self::getImageLinkMTOParams( $fp, $query ) + $params;
-		$s .= self::thumbToHtml( $imageLinkparams, $url );
+		$s .= self::thumbToHtml( $url, $imageLinkparams );
 
 		if ( isset( $fp['framed'] ) ) {
 			$zoomIcon = "";
@@ -286,10 +286,10 @@ class FlickrAPIUtils {
 		}
 
 		// Copied from linkWrap function
-		$contents = Xml::element( 'img', $attribs );
+		$contents = Html::rawElement( 'img', $attribs );
 		// @phan-suppress-next-line PhanPossiblyUndeclaredVariable
 		if ( $linkAttribs ) {
-			return Xml::tags( 'a', $linkAttribs, $contents );
+			return Html::rawElement( 'a', $linkAttribs, $contents );
 		} else {
 			return $contents;
 		}
