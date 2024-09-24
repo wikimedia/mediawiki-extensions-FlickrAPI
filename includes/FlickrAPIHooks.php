@@ -38,7 +38,7 @@ class FlickrAPIHooks implements ParserFirstCallInitHook {
 	public function flickrAPITag( $optionsString, array $args, Parser $parser ) {
 		try {
 			$output = $this->getOutput( $optionsString, $parser );
-		} catch ( MWException $e ) {
+		} catch ( Exception $e ) {
 			return $this->handleError( $e );
 		}
 		return $output;
@@ -124,10 +124,10 @@ class FlickrAPIHooks implements ParserFirstCallInitHook {
 	/**
 	 * Send out an error message
 	 *
-	 * @param MWException $e
+	 * @param Exception $e
 	 * @return string HTML
 	 */
-	private function handleError( MWException $e ) {
+	private function handleError( Exception $e ) {
 		return Html::element( 'strong', [ 'class' => [ 'error', 'flickrapi-error' ] ],
 				$e->getMessage() );
 	}
