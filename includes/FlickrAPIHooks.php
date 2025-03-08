@@ -100,7 +100,6 @@ class FlickrAPIHooks implements ParserFirstCallInitHook {
 	/**
 	 * Apply defaults for any parameter that has not been set within the <flickr> tag
 	 *
-	 * @global array $wgFlickrAPIDefaults
 	 * @param array &$options
 	 * @param array $info
 	 */
@@ -135,10 +134,6 @@ class FlickrAPIHooks implements ParserFirstCallInitHook {
 	/**
 	 * Get an image link for this user input
 	 *
-	 * @global string $wgFlickrAPIKey
-	 * @global string $wgFlickrAPISecret
-	 * @global boolean $wgUseFileCache
-	 * @global string $wgFileCacheDirectory
 	 * @param string $optionsString
 	 * @param Parser $parser
 	 * @return string HTML
