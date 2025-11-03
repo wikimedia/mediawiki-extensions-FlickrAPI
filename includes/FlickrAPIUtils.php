@@ -1,5 +1,7 @@
 <?php
 
+use MediaWiki\Html\Html;
+
 /**
  * Utilities, based on core MediaWiki code from version 1.24.2
  *

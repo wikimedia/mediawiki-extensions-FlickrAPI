@@ -2,6 +2,7 @@
 
 use Addshore\Psr\Cache\MWBagOStuffAdapter\BagOStuffPsrCache;
 use MediaWiki\Hook\ParserFirstCallInitHook;
+use MediaWiki\Html\Html;
 use Samwilson\PhpFlickr\PhpFlickr;
 
 /**
