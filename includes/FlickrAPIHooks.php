@@ -139,7 +139,6 @@ class FlickrAPIHooks implements ParserFirstCallInitHook {
 	 * @param Parser $parser
 	 * @return string HTML
 	 * @throws MWException
-	 * @suppress PhanTypePossiblyInvalidDimOffset Phan doesn't understand $options
 	 */
 	private function getOutput( $optionsString, Parser $parser ) {
 		global $wgFlickrAPIKey, $wgFlickrAPISecret;
