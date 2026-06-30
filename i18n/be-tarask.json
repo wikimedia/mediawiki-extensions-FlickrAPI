@@ -1,8 +1,9 @@
 {
 	"@metadata": {
 		"authors": [
-			"Red Winged Duck"
+			"Red Winged Duck",
+			"Ucukor"
 		]
 	},
-	"flickrapi-desc": "Убудоўвае выявы з Flickr"
+	"flickrapi-desc": "Укладае выявы з Flickr"
 }
